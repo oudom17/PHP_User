@@ -1,74 +1,67 @@
+<?php
+session_start(); // Add at the very top
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
+    if ($_POST['submit'] === 'addtocard') {
+        $product = [
+            'title' => $_POST['product-title'],
+            'size' => $_POST['product-size'],
+            'quantity' => $_POST['product-quantity'],
+            'price' => (float)$_POST['product-price']
+        ];
+        $_SESSION['cart'][] = $product;
+        header('Location: cart.php');
+        exit;
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <?php include "include/head.php" ?>
-</head>
 
+</head>
 <body>
 
-
-    <!-- Header -->
-    <?php include "include/header.php" ?>
-    <!-- Close Header -->
-
-    <!-- Modal -->
-    <div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="w-100 pt-1 mb-5 text-right">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="" method="get" class="modal-content modal-body border-0 p-0">
-                <div class="input-group mb-2">
-                    <input type="text" class="form-control" id="inputModalSearch" name="q" placeholder="Search ...">
-                    <button type="submit" class="input-group-text bg-success text-light">
-                        <i class="fa fa-fw fa-search text-white"></i>
-                    </button>
+<?php include "include/header.php" ?>
+    <!-- ... (existing content) ... -->
+    <div class="col-md-2">
+    <div class="card mb-4 product-wap rounded-0">
+        <div class="card rounded-0">
+            <a href="shop-single.php" class="product-image-link" style="display: block; text-decoration: none;">
+                <div class="product-image-container" style="background-color: #f0f8ff; display: flex; justify-content: center; align-items: center; padding: 20px; transition: opacity 0.3s ease;">
+                    <img class="card-img rounded-0 img-fluid" src="assets/img/shop_01.jpg" alt="Product Image" style="max-width: 200px;">
                 </div>
-            </form>
+            </a>
+            <div class="card-body text-center" style="padding: 15px;">
+                <a href="shop-single.php" class="card-title" style="text-decoration: none;"><h5>Oupidatat non</h5></a>
+                <p class="card-text">
+                    <span style="color: #ff0000; font-weight: bold;">SALE!</span><br>
+                    225.00$
+                </p>
+                <form method="POST" action="">
+                    <input type="hidden" name="product-title" value="Oupidatat non">
+                    <input type="hidden" name="product-size" value="M/L/X/XL">
+                    <input type="hidden" name="product-quantity" value="1">
+                    <input type="hidden" name="product-price" value="225.00">
+                    <button type="submit" class="btn btn-outline-dark mt-2" name="submit" value="addtocard" style="border-radius: 0; padding: 8px 20px;">
+                        Add to cart
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
+</div>
 
+<style>
+    .product-image-link:hover .product-image-container {
+        opacity: 0.4; /* Slightly fade the image on hover */
+    }
+    .product-image-link:hover .card-img {
+        cursor: pointer; /* Show pointer cursor on hover */
+    }
+</style>
 
-
-    <!-- Start Content -->
-    <div class="container py-5 ">
-        <div class="row">
-            <div class="col-lg-9 ">
-                <div class="row">
-
-                <!-- Start Product -->
-                    <div class="col-md-4">
-                        <div class="card mb-4 product-wap rounded-0">
-                            <div class="card rounded-0">
-                                <img class="card-img rounded-0 img-fluid" src="assets/img/shop_01.jpg">
-                                <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
-                                    <ul class="list-unstyled">
-                                        <li><a class="btn btn-success text-white" href="shop-single.php"><i class="far fa-heart"></i></a></li>
-                                        <li><a class="btn btn-success text-white mt-2" href="shop-single.php"><i class="far fa-eye"></i></a></li>
-                                        <li><a class="btn btn-success text-white mt-2" href="shop-single.php"><i class="fas fa-cart-plus"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <a href="shop-single.php" class="h3 text-decoration-none">Oupidatat non</a>
-                                <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
-                                    <li>M/L/X/XL</li>
-                                    <li class="pt-2">
-                                        <span class="product-color-dot color-dot-red float-left rounded-circle ml-1"></span>
-                                        <span class="product-color-dot color-dot-blue float-left rounded-circle ml-1"></span>
-                                        <span class="product-color-dot color-dot-black float-left rounded-circle ml-1"></span>
-                                        <span class="product-color-dot color-dot-light float-left rounded-circle ml-1"></span>
-                                        <span class="product-color-dot color-dot-green float-left rounded-circle ml-1"></span>
-                                    </li>
-                                </ul>
-                                <p class="text-center mb-0">$250.00</p>
-                            </div>
-                        </div>
-                    </div>
-                <!-- End Product -->
-
-                </div>
+    </div>
                 <div div="row">
                     <ul class="pagination pagination-lg justify-content-end">
                         <li class="page-item disabled">
@@ -86,10 +79,9 @@
 
         </div>
     </div>
-    <!-- End Content -->
 
-    <!-- Start Brands -->
-    <section class="bg-light py-5">
+     <!-- Start Brands -->
+     <section class="bg-light py-5">
         <div class="container my-4">
             <div class="row text-center py-3">
                 <div class="col-lg-6 m-auto">
@@ -192,10 +184,9 @@
     </section>
     <!--End Brands-->
 
-    <!-- Start Footer -->
     <?php include "include/footer.php" ?>
-    <!-- End Footer -->
-
+     
+    
     <!-- Start Script -->
     <script src="assets/js/jquery-1.11.0.min.js"></script>
     <script src="assets/js/jquery-migrate-1.2.1.min.js"></script>
@@ -204,5 +195,4 @@
     <script src="assets/js/custom.js"></script>
     <!-- End Script -->
 </body>
-
 </html>
