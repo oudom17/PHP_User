@@ -21,35 +21,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    if ($valid) {
-        // In a real application, you would:
-        // 1. Process payment
-        // 2. Save order to database
-        // 3. Send confirmation emails
-        
-        // Store order in session for demonstration
-        $_SESSION['order'] = [
-            'customer' => [
-                'name' => htmlspecialchars($_POST['name']),
-                'email' => htmlspecialchars($_POST['email']),
-                'address' => htmlspecialchars($_POST['address']),
-                'city' => htmlspecialchars($_POST['city']),
-                'state' => htmlspecialchars($_POST['state']),
-                'zip' => htmlspecialchars($_POST['zip']),
-                'country' => htmlspecialchars($_POST['country'])
-            ],
-            'items' => $_SESSION['cart'],
-            'total' => array_sum(array_map(function($item) {
-                return $item['price'] * $item['quantity'];
-            }, $_SESSION['cart']))
-        ];
+    // In the checkout page, modify the success handling section:
+if ($valid) {
+    $total = array_sum(array_map(function($item) {
+        return $item['price'] * $item['quantity'];
+    }, $_SESSION['cart']));
 
-        // Clear cart
-        unset($_SESSION['cart']);
-        $order_success = true;
-        header('Location: order_confirmation.php');
-        exit;
-    }
+    // Store order in session for demonstration
+    $_SESSION['order'] = [
+        'customer' => [
+            'name' => htmlspecialchars($_POST['name']),
+            'email' => htmlspecialchars($_POST['email']),
+            'address' => htmlspecialchars($_POST['address']),
+            'city' => htmlspecialchars($_POST['city']),
+            'state' => htmlspecialchars($_POST['state']),
+            'zip' => htmlspecialchars($_POST['zip']),
+            'country' => htmlspecialchars($_POST['country'])
+        ],
+        'items' => $_SESSION['cart'],
+        'total' => $total
+    ];
+
+    // Store total separately for Pay.php
+    $_SESSION['order_total'] = $total;
+
+    // Clear cart
+    unset($_SESSION['cart']);
+    $order_success = true;
+    header('Location: Pay.php');
+    exit;
+}
 }
 ?>
 <!DOCTYPE html>
@@ -110,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <option value="">Choose...</option>
                                 <option value="US">United States</option>
                                 <option value="UK">United Kingdom</option>
-                                <option value="CA">Canada</option>
+                                <option value="CA">Cambodia</option>
                                 <!-- Add more countries as needed -->
                             </select>
                         </div>
