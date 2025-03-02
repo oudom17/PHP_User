@@ -3,6 +3,14 @@ session_start();
 
 require_once 'PayWayApiCheckout.php';
 
+// Get order details from session
+$order = $_SESSION['order'] ?? null;
+if (!$order) {
+    // Redirect back to checkout if no order exists
+    header('Location: checkout.php');
+    exit;
+}
+
 $req_time = time();
 $merchant_id = "ec438740";
 $transactionId = time();
@@ -11,14 +19,14 @@ $firstName = 'Chetra';
 $lastName = 'Yoem';
 $phone = '0973835841';
 $email = 'chetra.storeit@gmail.com';
-$return_params = "Hello World!";
+$return_params = "http://localhost/project/eccommerce/Zay%20Shop";
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <?php include "include/head.php" ?>
-    <title>PayWay Checkout Sample</title>
+    <title>PayWay Checkout</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="author" content="PayWay">
@@ -31,13 +39,16 @@ $return_params = "Hello World!";
     <div id="aba_main_modal" class="aba-modal">
         <div class="aba-modal-content">
             <form method="POST" target="aba_webservice" action="<?php echo PayWayApiCheckout::getApiUrl(); ?>" id="aba_merchant_request">
-            <input type="hidden" name="hash" value="<?php echo PayWayApiCheckout::getHash($req_time . ABA_PAYWAY_MERCHANT_ID . $transactionId . $amount . $firstName  .$lastName .$email .$phone .$return_params); ?>" id="hash"/>
-						<input type="hidden" name="tran_id" value="<?php echo $transactionId; ?>" id="tran_id"/>
-						<input type="hidden" name="amount" value="<?php echo $amount; ?>" id="amount"/>
-						<input type="hidden" name="firstname" value="<?php echo $firstName; ?>"/>
-						<input type="hidden" name="lastname" value="<?php echo $lastName; ?>"/>
-						<input type="hidden" name="phone" value="<?php echo $phone; ?>"/>
-						<input type="hidden" name="email" value="<?php echo $email; ?>"/>
+                <input type="hidden" name="hash" value="<?php echo PayWayApiCheckout::getHash($req_time . ABA_PAYWAY_MERCHANT_ID . $transactionId . $amount . $firstName  .$lastName .$email .$phone .$return_params); ?>" id="hash"/>
+                <input type="hidden" name="tran_id" value="<?php echo $transactionId; ?>" id="tran_id"/>
+                <input type="hidden" name="amount" value="<?php echo $amount; ?>" id="amount"/>
+                <input type="hidden" name="firstname" value="<?php echo $firstName; ?>"/>
+                <input type="hidden" name="lastname" value="<?php echo $lastName; ?>"/>
+                <input type="hidden" name="phone" value="<?php echo $phone; ?>"/>
+                <input type="hidden" name="email" value="<?php echo $email; ?>"/>
+                <input type="hidden" name="return_params" value="<?php echo $return_params; ?>"/>
+                <input type="hidden" name="merchant_id" value="<?php echo $merchant_id; ?>"/>
+                <input type="hidden" name="req_time" value="<?php echo $req_time; ?>"/>
             </form>
         </div>
     </div>
@@ -73,15 +84,16 @@ $return_params = "Hello World!";
             </div>
         </div>
     </div>
+
     <script src="https://checkout.payway.com.kh/plugins/checkout2-0.js"></script>
-    
     <script>
-			$(document).ready(function () {
-				$('#checkout_button').click(function () {
-					AbaPayway.checkout();
-				});
-			});
-		</script>
-    <?php include "include/footer.php" ?>
+        $(document).ready(function () {
+            $('#checkout_button').click(function () {
+                AbaPayway.checkout();
+            });
+        });
+    </script>
+
+<?php include "include/footer.php" ?>
 </body>
 </html>
