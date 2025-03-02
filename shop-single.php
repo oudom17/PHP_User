@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         <div class="row">
             <!-- Product Image -->
             <div class="col-md-6">
-                <img src="activewear-image.jpg" alt="Oupidatat non" class="img-fluid" style="max-width: 100%;">
+                <img src="assets/img/shop_01.jpg" alt="Oupidatat non" class="img-fluid" style="max-width: 70%;">
             </div>
             
             <!-- Product Details -->
